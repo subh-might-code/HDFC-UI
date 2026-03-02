@@ -63,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isMobile = constraints.maxWidth < 600;
+        final isMobile = constraints.maxWidth < 650;
 
         return Scaffold(
           backgroundColor: AppTheme.backgroundGrey,
@@ -88,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: AppTheme.spacing24),
+                  SizedBox(height: isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
 
                   /// Welcome Text
                   Text(
@@ -101,15 +101,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         : Theme.of(context).textTheme.headlineLarge,
                   ),
 
-                  const SizedBox(height: AppTheme.spacing24),
+                  SizedBox(height: isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
 
                   /// SUMMARY CARDS
                   _buildSummaryCards(constraints.maxWidth),
 
-                  const SizedBox(height: AppTheme.spacing24),
+                  SizedBox(height: isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
 
                   /// CATEGORY FILTER
                   CategoryFilter(
+                    maxWidth: constraints.maxWidth,
                     selectedCategory: _selectedCategory,
                     onCategorySelected: (category) {
                       setState(() {
@@ -118,12 +119,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                   ),
 
-                  const SizedBox(height: AppTheme.spacing24),
+                  SizedBox(height: isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
 
                   /// POLICY GRID (FIXED)
                   _buildPolicyGrid(constraints.maxWidth, filteredPolicies),
 
-                  const SizedBox(height: AppTheme.spacing24),
+                  SizedBox(height: isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
                 ],
               ),
             ),
@@ -155,7 +156,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     ];
 
-    if (maxWidth < 600) {
+    if (maxWidth < 650) {
       return Column(
         children: cards
             .map((card) => Padding(
@@ -164,29 +165,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ))
             .toList(),
       );
-    } else if (maxWidth < 1100) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: cards
-              .map((card) => Padding(
-                    padding: const EdgeInsets.only(right: AppTheme.spacing16),
-                    child: SizedBox(width: 260, child: card),
-                  ))
-              .toList(),
-        ),
-      );
     } else {
-      return Row(
-        children: cards
-            .map((card) => Expanded(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(right: AppTheme.spacing16),
-                    child: card,
-                  ),
-                ))
-            .toList(),
+      // Use Row with IntrinsicHeight to make all cards equal size
+      return IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: cards.map((card) {
+            return Expanded(
+              child: card,
+            );
+          }).toList()
+          .expand((widget) => [widget, const SizedBox(width: AppTheme.spacing16)])
+          .toList()..removeLast(), // Interleave with spacing
+        ),
       );
     }
   }
@@ -198,19 +189,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (maxWidth > 1400) {
       crossAxisCount = 4;
-      childAspectRatio = 1.6;
+      childAspectRatio = 2.0;
     } 
     else if (maxWidth > 1100) {
       crossAxisCount = 3;
-      childAspectRatio = 1.55;
+      childAspectRatio = 1.9;
     } 
     else if (maxWidth > 750) {
       crossAxisCount = 2;
-      childAspectRatio = 1.5;
+      childAspectRatio = 2.0;
     } 
     else {
       crossAxisCount = 1;
-      childAspectRatio = 1.35;
+      childAspectRatio = 2.1;
     }
 
     return GridView.builder(

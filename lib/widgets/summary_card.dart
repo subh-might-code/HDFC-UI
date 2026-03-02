@@ -33,6 +33,7 @@ class SummaryCard extends StatelessWidget {
           boxShadow: AppTheme.cardShadow,
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center, // Center icon and text vertically
           children: [
             // Icon
             Container(
@@ -48,8 +49,8 @@ class SummaryCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
+                  // Removed MainAxisSize.min to allow Column to expand
+                  children: [
                   Text(
                     title,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -73,8 +74,17 @@ class SummaryCard extends StatelessWidget {
                             fontSize: 10,
                             color: AppTheme.textGrey,
                           ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                  ] else ...[
+                    const SizedBox(height: AppTheme.spacing4),
+                    // Placeholder to maintain equal height with cards that have subtitles
+                    Text(
+                      '',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontSize: 10,
+                          ),
                     ),
                   ],
                 ],

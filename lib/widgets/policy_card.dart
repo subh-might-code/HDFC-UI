@@ -27,94 +27,79 @@ class PolicyCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.spacing16),
+        padding: const EdgeInsets.all(AppTheme.spacing12),
         decoration: BoxDecoration(
           color: AppTheme.cardWhite,
           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
           boxShadow: AppTheme.softShadow,
         ),
-        child: Row(
+        child: Stack(
           children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// ================= ICON =================
+                Container(
+                  padding: const EdgeInsets.all(AppTheme.spacing8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryBlue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                  ),
+                  child: const Icon(
+                    Icons.shield_outlined,
+                    color: AppTheme.primaryBlue,
+                    size: 24,
+                  ),
+                ),
 
-            /// ================= MAIN CONTENT =================
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
+                const SizedBox(width: AppTheme.spacing16),
 
-                  /// TOP ROW
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                /// ================= MAIN CONTENT =================
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryBlue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Icon(
-                          Icons.shield_outlined,
-                          color: AppTheme.primaryBlue,
-                          size: 18,
+                      /// TITLE ROW (Badge moved to Stack)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 70), // Enough room for the badge
+                        child: Text(
+                          policy.name,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                      _StatusBadge(status: policy.status),
-                    ],
-                  ),
 
-                  const SizedBox(height: 6),
+                      const SizedBox(height: 4),
 
-                  /// POLICY NAME
-                  Text(
-                    policy.name,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                      /// POLICY ID
+                      Text(
+                        policy.policyId,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 10,
+                          color: AppTheme.textGrey,
+                        ),
+                      ),
 
-                  /// POLICY ID
-                  Text(
-                    policy.policyId,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 10,
-                      color: AppTheme.textGrey,
-                    ),
-                  ),
+                      const SizedBox(height: 4),
 
-                  const SizedBox(height: 2),
+                      /// DESCRIPTION
+                      Text(
+                        policy.description,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 11,
+                          color: AppTheme.textGrey,
+                        ),
+                      ),
 
-                  /// DESCRIPTION
-                  Text(
-                    policy.description,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 11,
-                      color: AppTheme.textGrey,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                      const SizedBox(height: 8),
 
-                  const SizedBox(height: 12),
-
-                  /// ================= SAFE PREMIUM SECTION =================
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-
-                      final isMobile = constraints.maxWidth < 260;
-
-                      return Wrap(
-                        spacing: 20,
-                        runSpacing: 6,
+                      /// ================= SAFE PREMIUM SECTION =================
+                      Row(
                         children: [
-
-                          SizedBox(
-                            width: isMobile
-                                ? constraints.maxWidth
-                                : 120,
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -126,22 +111,22 @@ class PolicyCard extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
-                                  _formatCurrency(policy.annualPremium),
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    _formatCurrency(policy.annualPremium),
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
                           ),
-
-                          SizedBox(
-                            width: isMobile
-                                ? constraints.maxWidth
-                                : 120,
+                          const SizedBox(width: AppTheme.spacing16),
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -153,32 +138,45 @@ class PolicyCard extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
-                                  _formatCurrency(policy.sumInsured),
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    _formatCurrency(policy.sumInsured),
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
                           ),
                         ],
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+
+                const SizedBox(width: 8),
+
+                /// ARROW (Aligned with the bottom section)
+                const Padding(
+                  padding: EdgeInsets.only(top: 80), // Adjust to align with the bottom row
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppTheme.textGrey,
+                  ),
+                ),
+              ],
             ),
 
-            const SizedBox(width: 6),
-
-            /// ARROW
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 14,
-              color: AppTheme.textGrey,
+            /// ============= PINNED STATUS BADGE =============
+            Positioned(
+              top: 0,
+              right: 0,
+              child: _StatusBadge(status: policy.status),
             ),
           ],
         ),

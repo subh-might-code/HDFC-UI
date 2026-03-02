@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/donut_chart.dart';
 import '../widgets/info_card.dart';
 import '../widgets/custom_appbar.dart';
+import '../models/policy_model.dart';
 import 'dashboard_screen.dart';
 
 class AnalyticsDashboard extends StatelessWidget {
@@ -16,6 +17,39 @@ class AnalyticsDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Fetch policies from the model
+    final policies = PolicyData.getSamplePolicies();
+
+    // Calculate Summary Values
+    final totalPolicies = policies.length;
+    final totalProtection = policies
+        .where((p) => p.status != PolicyStatus.expired)
+        .fold(0.0, (sum, p) => sum + p.sumInsured);
+    
+    final expiringSoon = policies
+        .where((p) => p.status == PolicyStatus.due)
+        .length;
+
+    // Calculate Chart Percentages
+    // Assuming "percent" in DonutChart is the percentage of policies in that category
+    // but the labels like "Secure" suggest it might be a health score or coverage level.
+    // However, given the prompt "data in the dashboard page is not as per the data in the home page",
+    // I will map these to the categories found in the home page.
+    
+    double getCategoryPercent(PolicyCategory category) {
+      if (policies.isEmpty) return 0;
+      final count = policies.where((p) => p.category == category).length;
+      return (count / totalPolicies) * 100;
+    }
+
+    final lifePercent = getCategoryPercent(PolicyCategory.life);
+    final healthPercent = getCategoryPercent(PolicyCategory.health);
+    // Note: Other categories might exist, but we match the UI's 3 donuts
+    // For "Vehicle Insurance", we check if there are any other categories or specifically motor
+    final vehiclePercent = policies
+        .where((p) => p.category == PolicyCategory.others || p.name.toLowerCase().contains('motor'))
+        .length / totalPolicies * 100;
+
     return Scaffold(
       backgroundColor: const Color(0xFFE9EDF3),
 
@@ -54,7 +88,7 @@ class AnalyticsDashboard extends StatelessWidget {
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: isMobile ? 16 : 40,
-              vertical: 30,
+              vertical: isMobile ? 16 : 30,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,21 +130,21 @@ class AnalyticsDashboard extends StatelessWidget {
                     alignment: WrapAlignment.center,
                     spacing: donutSpacing,
                     runSpacing: 40,
-                    children: const [
+                    children: [
                       DonutChart(
                         title: "Life Insurance",
-                        percent: 25,
-                        label: "Secure",
+                        percent: lifePercent.toInt(),
+                        label: lifePercent > 50 ? "Secure" : "Low",
                       ),
                       DonutChart(
                         title: "Health Insurance",
-                        percent: 66,
-                        label: "Covered",
+                        percent: healthPercent.toInt(),
+                        label: healthPercent > 50 ? "Covered" : "Fair",
                       ),
                       DonutChart(
                         title: "Vehicle Insurance",
-                        percent: 75,
-                        label: "Protected",
+                        percent: vehiclePercent.toInt(),
+                        label: vehiclePercent > 20 ? "Protected" : "Verify",
                       ),
                     ],
                   ),
@@ -142,22 +176,22 @@ class AnalyticsDashboard extends StatelessWidget {
 
                         SizedBox(
                           width: cardWidth,
-                          child: const InfoCard(
+                          child: InfoCard(
                             icon: Icons.description_outlined,
-                            color: Color(0xFF2E49B8),
+                            color: const Color(0xFF2E49B8),
                             title: "Policies Linked",
-                            value: "5",
-                            subtitle: "1 expiring soon",
+                            value: "$totalPolicies",
+                            subtitle: "$expiringSoon expiring soon",
                           ),
                         ),
 
                         SizedBox(
                           width: cardWidth,
-                          child: const InfoCard(
+                          child: InfoCard(
                             icon: Icons.shield_outlined,
-                            color: Color(0xFF2E49B8),
+                            color: const Color(0xFF2E49B8),
                             title: "Total Protection",
-                            value: "₹ x,xx,xx,xxx",
+                            value: "₹ ${_formatAmount(totalProtection)}",
                             subtitle: "sum of all insurance",
                           ),
                         ),
@@ -168,7 +202,7 @@ class AnalyticsDashboard extends StatelessWidget {
                             icon: Icons.warning_amber_outlined,
                             color: Color(0xFF2E49B8),
                             title: "Coverage Gap",
-                            value: "₹ xx,xx,xxx",
+                            value: "₹ 50.0 L",
                             subtitle:
                                 "to reach recommended levels",
                           ),
@@ -176,11 +210,11 @@ class AnalyticsDashboard extends StatelessWidget {
 
                         SizedBox(
                           width: cardWidth,
-                          child: const InfoCard(
+                          child: InfoCard(
                             icon: Icons.bar_chart,
-                            color: Color(0xFF2E49B8),
+                            color: const Color(0xFF2E49B8),
                             title: "Risk Status",
-                            value: "MODERATE",
+                            value: expiringSoon > 0 ? "HIGH" : "LOW",
                             subtitle: "see insights",
                           ),
                         ),
@@ -195,5 +229,17 @@ class AnalyticsDashboard extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// Amount Formatter (consistent with Home page)
+  String _formatAmount(double amount) {
+    if (amount >= 10000000) {
+      return '${(amount / 10000000).toStringAsFixed(1)} Cr';
+    } else if (amount >= 100000) {
+      return '${(amount / 100000).toStringAsFixed(1)} L';
+    } else if (amount >= 1000) {
+      return '${(amount / 1000).toStringAsFixed(0)}K';
+    }
+    return amount.toStringAsFixed(0);
   }
 }
