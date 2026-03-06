@@ -20,8 +20,8 @@ class SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
           padding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spacing16,
-          vertical: AppTheme.spacing8,
+          horizontal: AppTheme.spacing12, // Reduced from 16
+          vertical: AppTheme.spacing4, // Reduced from 8
         ),
         decoration: BoxDecoration(
           color: AppTheme.cardWhite,
@@ -33,57 +33,55 @@ class SummaryCard extends StatelessWidget {
           boxShadow: AppTheme.cardShadow,
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center, // Center icon and text vertically
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Icon
             Container(
-              padding: const EdgeInsets.all(AppTheme.spacing12),
+              padding: const EdgeInsets.all(AppTheme.spacing8), // Reduced from 12
               child: Icon(
                 icon,
                 color: AppTheme.primaryBlue,
-                size: 28,
+                size: 22, // Reduced from 28
               ),
             ),
-            const SizedBox(width: AppTheme.spacing16),
+            const SizedBox(width: AppTheme.spacing12), // Reduced from 16
             // Text content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                  // Removed MainAxisSize.min to allow Column to expand
                   children: [
                   Text(
                     title,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppTheme.textGrey,
-                          fontSize: 12,
+                          fontSize: 10, // Reduced from 11
                         ),
                   ),
-                  const SizedBox(height: AppTheme.spacing4),
+                  const SizedBox(height: AppTheme.spacing2), // Reduced from 4
                   Text(
                     value,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontSize: 22,
+                          fontSize: 16, // Reduced from 18
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   if (subtitle != null) ...[
-                    const SizedBox(height: AppTheme.spacing4),
+                    const SizedBox(height: AppTheme.spacing2),
                     Text(
                       subtitle!,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: 10,
+                            fontSize: 9,
                             color: AppTheme.textGrey,
                           ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ] else ...[
-                    const SizedBox(height: AppTheme.spacing4),
-                    // Placeholder to maintain equal height with cards that have subtitles
+                    const SizedBox(height: AppTheme.spacing2),
                     Text(
                       '',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: 10,
+                            fontSize: 9,
                           ),
                     ),
                   ],

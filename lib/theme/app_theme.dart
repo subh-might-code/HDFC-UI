@@ -66,19 +66,25 @@ class AppTheme {
       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
         // Large welcome text
         headlineLarge: GoogleFonts.poppins(
-          fontSize: 28,
+          fontSize: 22, // Reduced from 24
+          fontWeight: FontWeight.bold,
+          color: textDark,
+        ),
+        // Mobile headers
+        headlineSmall: GoogleFonts.poppins(
+          fontSize: 18,
           fontWeight: FontWeight.bold,
           color: textDark,
         ),
         // Card titles
         titleLarge: GoogleFonts.poppins(
-          fontSize: 16,
+          fontSize: 14, // Reduced from 15
           fontWeight: FontWeight.w600,
           color: textDark,
         ),
         // Policy names
         titleMedium: GoogleFonts.poppins(
-          fontSize: 15,
+          fontSize: 13, // Reduced from 14
           fontWeight: FontWeight.bold,
           color: textDark,
         ),
@@ -96,7 +102,7 @@ class AppTheme {
         ),
         // Numbers/values
         labelLarge: GoogleFonts.poppins(
-          fontSize: 20,
+          fontSize: 16, // Reduced from 18
           fontWeight: FontWeight.bold,
           color: textDark,
         ),

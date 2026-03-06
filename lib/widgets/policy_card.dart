@@ -66,7 +66,7 @@ class PolicyCard extends StatelessWidget {
                         child: Text(
                           policy.name,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontSize: 14,
+                            fontSize: 13, // Reduced from 14
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -89,7 +89,7 @@ class PolicyCard extends StatelessWidget {
                       Text(
                         policy.description,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontSize: 11,
+                          fontSize: 10, // Reduced from 11
                           color: AppTheme.textGrey,
                         ),
                       ),
@@ -117,7 +117,7 @@ class PolicyCard extends StatelessWidget {
                                   child: Text(
                                     _formatCurrency(policy.annualPremium),
                                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontSize: 14,
+                                      fontSize: 13, // Reduced from 14
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -144,7 +144,7 @@ class PolicyCard extends StatelessWidget {
                                   child: Text(
                                     _formatCurrency(policy.sumInsured),
                                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontSize: 14,
+                                      fontSize: 13, // Reduced from 14
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

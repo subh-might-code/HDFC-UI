@@ -66,8 +66,8 @@ class _FilterChip extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: AppTheme.spacing24,
-          vertical: isSmall ? 4.5 : AppTheme.spacing12,
+          horizontal: isSmall ? AppTheme.spacing16 : AppTheme.spacing24,
+          vertical: isSmall ? 4.0 : AppTheme.spacing12,
         ),
         decoration: BoxDecoration(
           color: isSelected ? AppTheme.primaryBlue : AppTheme.cardWhite,
@@ -83,7 +83,7 @@ class _FilterChip extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: isSelected ? Colors.white : AppTheme.textGrey,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            fontSize: 13,
+            fontSize: 12, // Reduced from 13
           ),
         ),
       ),

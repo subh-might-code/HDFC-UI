@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../theme/app_theme.dart';
 import 'dashboard_screen.dart';
+import 'recovery_verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -230,7 +231,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const RecoveryVerificationScreen(mode: RecoveryMode.getCustomerId),
+                            ),
+                          );
+                        },
                         child: const Text(
                           'Get Customer ID',
                           style: TextStyle(
@@ -282,9 +289,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const RecoveryVerificationScreen(mode: RecoveryMode.forgotPassword),
+                            ),
+                          );
+                        },
                         child: const Text(
-                          'Set/Reset Password',
+                          'Forgot Password?',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,

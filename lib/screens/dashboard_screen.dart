@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(AppTheme.spacing24),
+              padding: EdgeInsets.all(isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -96,7 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: isMobile
                         ? Theme.of(context)
                             .textTheme
-                            .headlineMedium
+                            .headlineSmall
                             ?.copyWith(fontWeight: FontWeight.bold)
                         : Theme.of(context).textTheme.headlineLarge,
                   ),
@@ -160,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return Column(
         children: cards
             .map((card) => Padding(
-                  padding: const EdgeInsets.only(bottom: AppTheme.spacing16),
+                  padding: EdgeInsets.only(bottom: maxWidth < 650 ? AppTheme.spacing12 : AppTheme.spacing16),
                   child: card,
                 ))
             .toList(),
